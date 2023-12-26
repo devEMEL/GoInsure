@@ -4,21 +4,20 @@ import { PeraWalletConnect } from '@perawallet/connect'
 import { PROVIDER_ID, ProvidersArray, WalletProvider, useInitializeProviders } from '@txnlab/use-wallet'
 import algosdk from 'algosdk'
 import { SnackbarProvider } from 'notistack'
+import { Route, Routes } from 'react-router-dom'
+import Homepage from './components/Homepage'
+import Navbar from './components/Navbar'
 import { getAlgodConfigFromViteEnvironment } from './utils/network/getAlgoClientConfigs'
 
+
 let providersArray: ProvidersArray
-if (import.meta.env.VITE_ALGOD_NETWORK === '') {
-  providersArray = [{ id: PROVIDER_ID.KMD }]
-} else {
-  providersArray = [
-    { id: PROVIDER_ID.DEFLY, clientStatic: DeflyWalletConnect },
-    { id: PROVIDER_ID.PERA, clientStatic: PeraWalletConnect },
-    { id: PROVIDER_ID.DAFFI, clientStatic: DaffiWalletConnect },
-    { id: PROVIDER_ID.EXODUS },
-    // If you are interested in WalletConnect v2 provider
-    // refer to https://github.com/TxnLab/use-wallet for detailed integration instructions
-  ]
-}
+providersArray = [
+  { id: PROVIDER_ID.DEFLY, clientStatic: DeflyWalletConnect },
+  { id: PROVIDER_ID.PERA, clientStatic: PeraWalletConnect },
+  { id: PROVIDER_ID.DAFFI, clientStatic: DaffiWalletConnect },
+  { id: PROVIDER_ID.EXODUS },
+]
+
 
 export default function App() {
   const algodConfig = getAlgodConfigFromViteEnvironment()
@@ -35,13 +34,17 @@ export default function App() {
   })
 
   return (
+
+
     <SnackbarProvider maxSnack={3}>
       <WalletProvider value={walletProviders}>
-        <div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos perspiciatis quae incidunt quaerat quod nulla, possimus totam
-          voluptas iure facere! Commodi dignissimos quaerat voluptate? Asperiores incidunt voluptates quos porro pariatur.
-        </div>
+
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          {/* <Route path="/list-project" element={<ListToken />} /> */}
+      </Routes>
       </WalletProvider>
-    </SnackbarProvider>
+    </SnackbarProvider> 
   )
 }
